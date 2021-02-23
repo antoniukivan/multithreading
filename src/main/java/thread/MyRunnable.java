@@ -4,9 +4,9 @@ import org.apache.log4j.Logger;
 import util.Counter;
 
 public class MyRunnable implements Runnable {
+    public static final int END = 100;
     private static final Logger logger = Logger.getLogger(Counter.class);
     private final Counter counter;
-    public static final int END = 100;
 
     public MyRunnable(Counter counter) {
         this.counter = counter;
