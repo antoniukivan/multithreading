@@ -1,6 +1,6 @@
-import counter.Counter;
 import thread.MyRunnable;
 import thread.MyThread;
+import util.Counter;
 
 public class Main {
     private static final int VALUE = 0;

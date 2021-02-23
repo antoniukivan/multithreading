@@ -1,6 +1,6 @@
 package thread;
 
-import counter.Counter;
+import util.Counter;
 
 public class MyRunnable implements Runnable {
     private final Counter counter;

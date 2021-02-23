@@ -1,6 +1,6 @@
 package thread;
 
-import counter.Counter;
+import util.Counter;
 
 public class MyThread extends Thread {
     private final Counter counter;
