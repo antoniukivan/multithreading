@@ -3,11 +3,6 @@ package thread;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -19,7 +14,7 @@ public class MyCallableTest {
     private static List<Integer> firstList;
     private static List<Integer> secondList;
     private static List<Integer> thirdList;
-    private static ExecutorService executorService;
+    private static ExecutorServiceCalculator executorServiceCalculator;
 
     @BeforeAll
     static void beforeAll() {
@@ -30,29 +25,19 @@ public class MyCallableTest {
         thirdList = new ArrayList<>();
         Util.fillList(thirdList, SIZE);
 
-        executorService = Executors.newSingleThreadExecutor();
+        executorServiceCalculator = new ExecutorServiceCalculator();
     }
 
     @Test
     void sum_Ok() {
-        Callable<Integer> myCallable = new MyCallable(firstList);
-        Future<Integer> firstFuture = executorService.submit(myCallable);
-        myCallable = new MyCallable(secondList);
-        Future<Integer> secondFuture = executorService.submit(myCallable);
-        myCallable = new MyCallable(thirdList);
-        Future<Integer> thirdFuture = executorService.submit(myCallable);
-        myCallable = new MyCallable(Collections.emptyList());
-        Future<Integer> fourthFuture = executorService.submit(myCallable);
-        try {
-            Assertions.assertEquals(getSum(firstList), firstFuture.get());
-            Assertions.assertEquals(getSum(secondList), secondFuture.get());
-            Assertions.assertEquals(getSum(thirdList), thirdFuture.get());
-            Assertions.assertEquals(0, fourthFuture.get());
-        } catch (InterruptedException e) {
-            throw new RuntimeException("Computation was canceled", e);
-        } catch (ExecutionException e) {
-            throw new RuntimeException("Computation threw an exception", e);
-        }
+        Integer sum = executorServiceCalculator.calculate(firstList);
+        Assertions.assertEquals(getSum(firstList), sum);
+        sum = executorServiceCalculator.calculate(secondList);
+        Assertions.assertEquals(getSum(secondList), sum);
+        sum = executorServiceCalculator.calculate(thirdList);
+        Assertions.assertEquals(getSum(thirdList), sum);
+        sum = executorServiceCalculator.calculate(Collections.emptyList());
+        Assertions.assertEquals(0, sum);
     }
 
     private int getSum(List<Integer> list) {
@@ -61,6 +46,6 @@ public class MyCallableTest {
 
     @AfterAll
     static void afterAll() {
-        executorService.shutdown();
+        executorServiceCalculator.shutdown();
     }
 }
